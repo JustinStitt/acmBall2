@@ -1,6 +1,9 @@
+<svelte:options accessors={true} />
+
 <script>
 	import Matter from 'matter-js';
 	import { onMount } from 'svelte';
+	import { boxA_pos } from '../stores.js';
 
 	export let width = 500;
 	export let height = 500;
@@ -19,7 +22,7 @@
 	// create a renderer
 
 	// create two boxes and a ground
-	var boxA = Bodies.rectangle(100, 200, 80, 80);
+	export var boxA = Bodies.rectangle(100, 200, 80, 80);
 	var boxB = Bodies.rectangle(200, 50, 80, 80);
 	var ground = Bodies.rectangle(width / 2, height, width, 60, { isStatic: true });
 
@@ -61,6 +64,7 @@
 	setInterval(() => {
 		gamma += 0.11;
 		Matter.Body.setPosition(boxA, { x: Math.sin(gamma) * 50 + x_slider, y: boxA.position.y });
+		boxA_pos.update((n) => (n = boxA.position.x));
 	}, 1);
 
 	$: changeBoxAPosition(x_slider);

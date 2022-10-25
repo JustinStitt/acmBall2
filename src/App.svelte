@@ -1,11 +1,20 @@
 <script>
 	import Game from './lib/Game.svelte';
+	import Editor from './lib/Editor.svelte';
+	import { onMount } from 'svelte';
+
+	let editor_pane;
+	let slider_value = 10;
+	let tile;
+
+	onMount(() => {});
 </script>
 
 <div class="titlebar">acmBall2 : Electric Boogaloo</div>
 <div class="container">
-	<Game />
-	<div class="editor">Here's Some Code</div>
+	<Game bind:this={tile} />
+	<div id="editor-pane" class="editor" bind:this={editor_pane} />
+	<Editor />
 </div>
 
 <style>
