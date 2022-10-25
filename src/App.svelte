@@ -32,9 +32,11 @@
 	}
 
 	.editor {
-		background-color: green;
+		background-color: rgb(31, 31, 31);
 		width: 40vw;
 		height: 80vh;
+		overflow-y: scroll;
+		/* overflow-x: scroll; */
 	}
 
 	.container {

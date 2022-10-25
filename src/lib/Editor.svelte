@@ -11,8 +11,22 @@
 
 	let editorState = EditorState.create({
 		doc: 'Hello World\n\n\n\n',
-		extensions: [keymap.of(defaultKeymap), basicSetup, javascript(), oneDark]
+		extensions: [
+			keymap.of(defaultKeymap),
+			basicSetup,
+			javascript(),
+			oneDark,
+			EditorView.updateListener.of((v) => {
+				if (v.docChanged) {
+					editorChanged(v);
+				}
+			})
+		]
 	});
+
+	const editorChanged = (v) => {
+		/* editor changed */
+	};
 
 	let some_value;
 	boxA_pos.subscribe((value) => {
@@ -22,6 +36,7 @@
 	$: text = 'hello world\n boxA x pos: ' + some_value + "\n\n\n\nconsole.log('test')\n";
 	let view;
 	const updateEditorText = (txt) => {
+		console.log('here');
 		const update = view.state.update({
 			changes: { from: 0, to: view.state.doc.length, insert: txt }
 		});
@@ -37,3 +52,6 @@
 		});
 	});
 </script>
+
+<style>
+</style>

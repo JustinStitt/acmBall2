@@ -5,8 +5,10 @@
 	import { onMount } from 'svelte';
 	import { boxA_pos } from '../stores.js';
 
-	export let width = 500;
-	export let height = 500;
+	/* These don't affect physical Canvas size but rather resolution of game image
+	 * (zoom... basically) */
+	export let width = 800;
+	export let height = 800;
 
 	// module aliases
 	var Engine = Matter.Engine,
@@ -58,16 +60,19 @@
 
 	const changeBoxAPosition = (new_pos) => {
 		Matter.Body.setPosition(boxA, { x: new_pos, y: boxA.position.y });
+		boxA = boxA; // used for reactive statements to trigger on property change
 	};
 
-	let gamma = 0;
-	setInterval(() => {
-		gamma += 0.11;
-		Matter.Body.setPosition(boxA, { x: Math.sin(gamma) * 50 + x_slider, y: boxA.position.y });
-		boxA_pos.update((n) => (n = boxA.position.x));
-	}, 1);
-
 	$: changeBoxAPosition(x_slider);
+	// let gamma = 0;
+	// setInterval(() => {
+	// 	gamma += 0.11;
+	// 	Matter.Body.setPosition(boxA, { x: Math.sin(gamma) * 50 + x_slider, y: boxA.position.y });
+	// }, 1);
+
+	$: {
+		boxA_pos.update((n) => (n = boxA.position.x));
+	}
 
 	let x_slider = 200;
 </script>
@@ -76,8 +81,12 @@
 	<canvas id="main-canvas" bind:this={main_canvas} />
 </div>
 
-<!-- <button on:click={applyForceToBoxA}>Apply Force to boxA</button>
-<input type="range" min="0" max="300" bind:value={x_slider} /> -->
+<!-- <button on:click={applyForceToBoxA}>Apply Force to boxA</button> --->
+<label style="display: flex;flex-direction:column;">
+	boxA xpos
+	<input title="boxA xpos" type="range" min="0" max="300" bind:value={x_slider} />
+</label>
+
 <style>
 	#main-canvas,
 	.game-container {
