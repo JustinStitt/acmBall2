@@ -1,0 +1,15 @@
+{
+  "workbench.colorCustomizations": {
+    "editor.findMatchBackground": "#00cc4439",
+    "editor.findMatchHighlightBackground": "#a79fa647",
+    "editorCursor.foreground": "#62a8b78c",
+    "editor.lineHighlightBorder": "#96308f33",
+    "[Kanagawa]": {
+      "editor.selectionBackground": "#9e547c7e",
+      "editor.selectionHighlightBackground": "#8c84883d",
+      "statusBar.background": "#1f1f28",
+      "statusBarItem.remoteBackground": "#1f1f28"
+    },
+    "minimap.background": "#00000000"
+  }
+}
