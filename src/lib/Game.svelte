@@ -82,11 +82,6 @@
 </div>
 
 <!-- <button on:click={applyForceToBoxA}>Apply Force to boxA</button> --->
-<label style="display: flex;flex-direction:column;">
-	boxA xpos
-	<input title="boxA xpos" type="range" min="0" max="300" bind:value={x_slider} />
-</label>
-
 <style>
 	#main-canvas,
 	.game-container {

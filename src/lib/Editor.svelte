@@ -8,9 +8,21 @@
 	import { javascript } from '@codemirror/lang-javascript';
 	import { onMount } from 'svelte';
 	import { boxA_pos } from '../stores.js';
+	import readOnlyRangesExtension from 'codemirror-readonly-ranges';
+
+	const getReadOnlyRanges = (target_state) => {
+		return [
+			{
+				from: 0,
+				to: target_state.doc.line(1).to
+			}
+		];
+	};
+
+	let editor_pane;
 
 	let editorState = EditorState.create({
-		doc: 'Hello World\n\n\n\n',
+		doc: 'Hello World // read-only \n',
 		extensions: [
 			keymap.of(defaultKeymap),
 			basicSetup,
@@ -20,12 +32,14 @@
 				if (v.docChanged) {
 					editorChanged(v);
 				}
-			})
+			}),
+			readOnlyRangesExtension(getReadOnlyRanges)
 		]
 	});
 
-	const editorChanged = (v) => {
+	const editorChanged = (new_view) => {
 		/* editor changed */
+		text = new_view.state.doc.text;
 	};
 
 	let some_value;
@@ -33,12 +47,12 @@
 		some_value = value;
 	});
 
-	$: text = 'hello world\n boxA x pos: ' + some_value + "\n\n\n\nconsole.log('test')\n";
+	$: text = 'hello world\nboxA x pos: ' + some_value + "\n\n\n\nconsole.log('test')\n";
+
 	let view;
 	const updateEditorText = (txt) => {
-		console.log('here');
 		const update = view.state.update({
-			changes: { from: 0, to: view.state.doc.length, insert: txt }
+			changes: { from: view.state.doc.line(2).to, to: view.state.doc.length, insert: txt }
 		});
 		view.update([update]);
 	};
@@ -53,5 +67,47 @@
 	});
 </script>
 
+<div class="editor-container">
+	<div id="editor-pane" class="editor" bind:this={editor_pane} />
+	<div class="editor-controls">
+		<button>One</button>
+		<button>Two</button>
+		<button>Three</button>
+	</div>
+</div>
+
 <style>
+	.editor {
+		background-color: rgb(22, 35, 216);
+		width: 40vw;
+		height: 70vh;
+		overflow-y: scroll;
+		padding: 5px;
+		border-radius: 2%;
+
+		display: flex;
+		flex-direction: column-reverse;
+	}
+
+	.editor-controls {
+		margin: 5px;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+	}
+
+	.editor-container {
+		background-color: orange;
+		border-radius: 2%;
+		max-height: 80vh;
+		padding: 4px;
+	}
+
+	@media only screen and (max-width: 490px) {
+		.editor {
+			width: 97vw;
+			margin-top: 5vh;
+			margin-bottom: 10vh;
+		}
+	}
 </style>
