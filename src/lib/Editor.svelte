@@ -1,31 +1,54 @@
 <script>
 	import { EditorState } from '@codemirror/state';
 	import { EditorView, keymap } from '@codemirror/view';
-	import { solarizedDark } from 'cm6-theme-solarized-dark';
 	import { oneDark } from '@codemirror/theme-one-dark';
 	import { basicSetup } from 'codemirror';
 	import { defaultKeymap } from '@codemirror/commands';
-	import { javascript } from '@codemirror/lang-javascript';
+	import { linter, lintGutter } from '@codemirror/lint';
+	import { esLint, javascript } from '@codemirror/lang-javascript';
 	import { onMount } from 'svelte';
-	import { editor_text } from '../stores.js';
+	import { editor_text, starting_text } from '../stores.js';
 	import readOnlyRangesExtension from 'codemirror-readonly-ranges';
 	import { createEventDispatcher } from 'svelte';
+	import '../../node_modules/eslint-linter-browserify';
 
 	const dispatch = createEventDispatcher();
+	const lint_config = {
+		// eslint configuration
+		parserOptions: {
+			ecmaVersion: 2019,
+			sourceType: 'module'
+		},
+		env: {
+			browser: true,
+			node: true
+		},
+		rules: {
+			semi: ['error', 'never']
+		}
+	};
 
 	const getReadOnlyRanges = (target_state) => {
 		return [
-			{
-				from: 0,
-				to: target_state.doc.line(1).to
-			}
+			// {
+			// 	from: 0,
+			// 	to: target_state.doc.line(1).to
+			// },
+			// {
+			// 	from: target_state.doc.line(5).from,
+			// 	to: target_state.doc.line(5).to
+			// },
+			// {
+			// 	from: target_state.doc.line(target_state.doc.lines).from,
+			// 	to: undefined
+			// }
 		];
 	};
 
 	let editor_pane;
 
 	let editorState = EditorState.create({
-		doc: "console.log('hi'); // read-only \n",
+		doc: $starting_text,
 		extensions: [
 			keymap.of(defaultKeymap),
 			basicSetup,
@@ -36,27 +59,36 @@
 					editorChanged(v);
 				}
 			}),
-			readOnlyRangesExtension(getReadOnlyRanges)
+			readOnlyRangesExtension(getReadOnlyRanges),
+			linter(esLint(new eslint.Linter(), lint_config)) // no idea why red squiggles
 		]
 	});
 
-	let text = '';
 	const editorChanged = (new_view) => {
 		/* editor changed */
-		text = new_view.state.doc.text;
+		text = new_view.state.doc.toString();
 	};
-
-	let some_value = 1337;
 
 	$: editor_text.set(text);
 
+	let text = $starting_text;
+	editor_text.subscribe((val) => {
+		text = val;
+	});
+
 	let view;
 	const updateEditorText = (txt) => {
-		// TODO: fix line(2) not existing potentially
+		let old_cursor = view.state.selection.ranges[0].from;
 		const update = view.state.update({
-			changes: { from: view.state.doc.line(2).to, to: view.state.doc.length, insert: txt }
+			changes: { from: 0, to: view.state.doc.length, insert: txt }
 		});
 		view.update([update]);
+		view.dispatch({
+			selection: {
+				anchor: old_cursor,
+				head: old_cursor
+			}
+		});
 	};
 
 	$: if (view) updateEditorText(text);
@@ -72,13 +104,17 @@
 	const runCode = () => {
 		dispatch('runCode');
 	};
+
+	const stopCode = () => {
+		dispatch('stopCode');
+	};
 </script>
 
 <div class="editor-container">
 	<div id="editor-pane" class="editor" bind:this={editor_pane} />
 	<div class="editor-controls">
-		<button on:click={runCode}>Run</button>
-		<button>Two</button>
+		<button on:click={runCode}>Run 🟢</button>
+		<button on:click={stopCode}>Stop 🛑</button>
 		<button>Three</button>
 	</div>
 </div>

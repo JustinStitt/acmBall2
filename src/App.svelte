@@ -9,12 +9,16 @@
 	const runCode = () => {
 		game.runCode();
 	};
+
+	const stopCode = () => {
+		game.stopCode();
+	};
 </script>
 
 <div class="titlebar">acmBall2 : Electric Boogaloo</div>
 <div class="container">
 	<Game bind:this={game} />
-	<Editor on:runCode={runCode} />
+	<Editor on:runCode={runCode} on:stopCode={stopCode} />
 </div>
 
 <style>
