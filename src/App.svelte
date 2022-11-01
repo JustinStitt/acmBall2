@@ -26,10 +26,10 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		font-size: calc(12px + 3vw);
+		font-size: calc(12px + 2vw);
 		text-align: center;
 		width: 97vw;
-		height: 10vh;
+		height: 7vh;
 		background-color: rgba(27, 26, 26, 0.799);
 		margin-top: 1vh;
 		border: 1px dotted aliceblue;

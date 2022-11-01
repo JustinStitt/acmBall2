@@ -59,6 +59,7 @@
 					editorChanged(v);
 				}
 			}),
+			EditorView.lineWrapping,
 			readOnlyRangesExtension(getReadOnlyRanges),
 			linter(esLint(new eslint.Linter(), lint_config)) // no idea why red squiggles
 		]
@@ -77,7 +78,10 @@
 	});
 
 	let view;
-	const updateEditorText = (txt) => {
+	export const updateEditorText = (txt) => {
+		text = txt;
+		editor_text.set(txt);
+		console.log($editor_text);
 		let old_cursor = view.state.selection.ranges[0].from;
 		const update = view.state.update({
 			changes: { from: 0, to: view.state.doc.length, insert: txt }
@@ -91,7 +95,7 @@
 		});
 	};
 
-	$: if (view) updateEditorText(text);
+	// $: if (view) updateEditorText(text);
 
 	onMount(() => {
 		view = new EditorView({
@@ -108,14 +112,18 @@
 	const stopCode = () => {
 		dispatch('stopCode');
 	};
+
+	const resetCode = () => {
+		updateEditorText($starting_text);
+	};
 </script>
 
 <div class="editor-container">
 	<div id="editor-pane" class="editor" bind:this={editor_pane} />
 	<div class="editor-controls">
-		<button on:click={runCode}>Run 🟢</button>
-		<button on:click={stopCode}>Stop 🛑</button>
-		<button>Three</button>
+		<button on:click={runCode}>Compile Code 🟢</button>
+		<button on:click={resetCode}>Reset Code</button>
+		<button>Bar</button>
 	</div>
 </div>
 

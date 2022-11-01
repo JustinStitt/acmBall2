@@ -3,14 +3,38 @@
 <script>
 	import Tile from './Tile.svelte';
 	import Toolbar from './Toolbar.svelte';
-	import { Render, engine, width, height } from './engine.js';
+	import {
+		Runner,
+		setRunning,
+		World,
+		Engine,
+		runner,
+		Render,
+		engine,
+		width,
+		height
+	} from './engine.js';
 	import { onMount } from 'svelte';
 	import { editor_text } from '../stores';
 
 	let tile;
 	let main_canvas;
 
+	export const runGame = () => {
+		setRunning(true);
+		Runner.run(runner, engine);
+	};
+
+	export const resetGame = () => {
+		setRunning(false);
+		World.clear(engine.world);
+		Engine.clear(engine);
+		Runner.stop(runner);
+		stopCode();
+	};
+
 	export const runCode = () => {
+		resetGame();
 		tile.runCode();
 	};
 
@@ -28,7 +52,14 @@
 			// element: main_canvas,
 			canvas: main_canvas,
 			engine: engine,
-			options: { height: height, width: width, hasBounds: true }
+			options: {
+				height: height,
+				width: width,
+				hasBounds: true,
+				wireframes: false,
+				showPerformance: true,
+				background: 'transparent'
+			}
 		});
 
 		Render.run(render);
@@ -39,25 +70,24 @@
 	<canvas id="main-canvas" bind:this={main_canvas} />
 </div>
 <Tile bind:this={tile} />
-<Toolbar />
+<Toolbar {runGame} {resetGame} />
 
 <style>
-	#main-canvas,
-	.game-container {
-		border-radius: 2%;
-	}
-
 	#main-canvas {
+		box-sizing: border-box;
 		width: 100%;
 		height: 100%;
+		border: 4px dotted gray;
 	}
 
 	.game-container {
 		width: 35vw;
 		/* min-width: 400px; */
 		aspect-ratio: 1;
-		background-color: goldenrod;
+		/* background-color: goldenrod; */
+		background-image: url('gridbg.png');
 		padding: 8px;
+		border-radius: 1%;
 	}
 
 	@media only screen and (max-width: 490px) {

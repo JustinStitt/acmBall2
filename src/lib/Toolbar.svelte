@@ -1,19 +1,17 @@
 <script>
 	import { editor_text, starting_text } from '../stores';
 
+	export let runGame;
+	export let resetGame;
+
 	const test = () => {
 		editor_text.set('test');
-	};
-
-	const resetCode = () => {
-		editor_text.set($starting_text);
 	};
 </script>
 
 <div class="toolbar-container">
-	<button on:click={test}>test</button>
-	<button on:click={test}>test</button>
-	<button on:click={resetCode}>Reset Code</button>
+	<button on:click={runGame}>Run Game</button>
+	<button on:click={resetGame}>Reset Game</button>
 </div>
 
 <style>
