@@ -75,14 +75,6 @@ button:active {
 	}
 }
 
-@media only screen and (max-width: 490px) {
-	.editor {
-		width: 97vw !important;
-		margin-top: 5vh !important;
-		margin-bottom: 10vh !important;
-	}
-}
-
 .cm-editor .cm-content {
 	height: 80vh;
 }

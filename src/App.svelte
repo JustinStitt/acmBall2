@@ -3,15 +3,18 @@
 	import Editor from './lib/Editor.svelte';
 	import { onMount } from 'svelte';
 
-	let tile;
-
 	onMount(() => {});
+
+	let game;
+	const runCode = () => {
+		game.runCode();
+	};
 </script>
 
 <div class="titlebar">acmBall2 : Electric Boogaloo</div>
 <div class="container">
-	<Game bind:this={tile} />
-	<Editor />
+	<Game bind:this={game} />
+	<Editor on:runCode={runCode} />
 </div>
 
 <style>
@@ -37,7 +40,8 @@
 		align-items: center;
 		padding: 8px;
 
-		background-color: rebeccapurple;
+		background-color: rgba(47, 39, 56, 0.293);
+		border: 2px inset aliceblue;
 	}
 
 	@media only screen and (max-width: 490px) {

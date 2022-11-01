@@ -7,8 +7,11 @@
 	import { defaultKeymap } from '@codemirror/commands';
 	import { javascript } from '@codemirror/lang-javascript';
 	import { onMount } from 'svelte';
-	import { boxA_pos } from '../stores.js';
+	import { editor_text } from '../stores.js';
 	import readOnlyRangesExtension from 'codemirror-readonly-ranges';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	const getReadOnlyRanges = (target_state) => {
 		return [
@@ -22,7 +25,7 @@
 	let editor_pane;
 
 	let editorState = EditorState.create({
-		doc: 'Hello World // read-only \n',
+		doc: "console.log('hi'); // read-only \n",
 		extensions: [
 			keymap.of(defaultKeymap),
 			basicSetup,
@@ -37,20 +40,19 @@
 		]
 	});
 
+	let text = '';
 	const editorChanged = (new_view) => {
 		/* editor changed */
 		text = new_view.state.doc.text;
 	};
 
-	let some_value;
-	boxA_pos.subscribe((value) => {
-		some_value = value;
-	});
+	let some_value = 1337;
 
-	$: text = 'hello world\nboxA x pos: ' + some_value + "\n\n\n\nconsole.log('test')\n";
+	$: editor_text.set(text);
 
 	let view;
 	const updateEditorText = (txt) => {
+		// TODO: fix line(2) not existing potentially
 		const update = view.state.update({
 			changes: { from: view.state.doc.line(2).to, to: view.state.doc.length, insert: txt }
 		});
@@ -64,13 +66,18 @@
 			state: editorState,
 			parent: document.getElementById('editor-pane')
 		});
+		editorChanged(view);
 	});
+
+	const runCode = () => {
+		dispatch('runCode');
+	};
 </script>
 
 <div class="editor-container">
 	<div id="editor-pane" class="editor" bind:this={editor_pane} />
 	<div class="editor-controls">
-		<button>One</button>
+		<button on:click={runCode}>Run</button>
 		<button>Two</button>
 		<button>Three</button>
 	</div>
@@ -94,6 +101,8 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: space-around;
+		background-color: blueviolet;
+		border-radius: 5px;
 	}
 
 	.editor-container {
