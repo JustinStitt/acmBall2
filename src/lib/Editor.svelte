@@ -105,8 +105,8 @@
 		editorChanged(view);
 	});
 
-	const runCode = () => {
-		dispatch('runCode');
+	const compileCode = () => {
+		dispatch('compileCode');
 	};
 
 	const stopCode = () => {
@@ -121,16 +121,16 @@
 <div class="editor-container">
 	<div id="editor-pane" class="editor" bind:this={editor_pane} />
 	<div class="editor-controls">
-		<button on:click={runCode}>Compile Code 🟢</button>
+		<button on:click={compileCode}>Compile Code 🟢</button>
 		<button on:click={resetCode}>Reset Code</button>
-		<button>Bar</button>
+		<button>QazQux</button>
 	</div>
 </div>
 
 <style>
 	.editor {
 		background-color: rgb(22, 35, 216);
-		width: 40vw;
+		width: 50vw;
 		height: 70vh;
 		overflow-y: scroll;
 		padding: 5px;

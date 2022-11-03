@@ -6,19 +6,12 @@
 	onMount(() => {});
 
 	let game;
-	const runCode = () => {
-		game.runCode();
-	};
-
-	const stopCode = () => {
-		game.stopCode();
-	};
 </script>
 
 <div class="titlebar">acmBall2 : Electric Boogaloo</div>
 <div class="container">
 	<Game bind:this={game} />
-	<Editor on:runCode={runCode} on:stopCode={stopCode} />
+	<Editor on:compileCode={() => game.compileCode()} on:stopCode={() => game.stopCode()} />
 </div>
 
 <style>

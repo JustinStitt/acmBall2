@@ -1,11 +1,12 @@
+<!-- DOM-less (sorta) component used by Graphical aid, Game -->
 <script>
 	import { editor_text } from '../stores';
 	import Engine from './Engine.svelte';
 	import { onMount } from 'svelte';
 	import { engines } from './engines';
 
-	let id = 0; // each tile needs unique id which maps to their engine index
-	let tick_rate = 1;
+	export let id = 0; // each tile needs unique id which maps to their engine index
+
 	let text;
 	editor_text.subscribe((value) => {
 		text = value;
@@ -14,7 +15,7 @@
 	let draw_interval;
 	let engine;
 
-	export const runCode = () => {
+	export const compileAndRunCode = () => {
 		console.log('running code inside tile!');
 
 		/* 		remove old code runner if it exists */
@@ -40,9 +41,7 @@
 	};
 
 	export const startDraw = () => {
-		draw_interval = setInterval(() => {
-			engine.meta.draw();
-		}, tick_rate);
+		engine.Events.on(engine.runner, 'tick', engine.meta.draw);
 	};
 
 	export const stopCode = () => {
@@ -51,11 +50,13 @@
 			code_runner.remove();
 		}
 
-		/* janky hack to clear ALL intervals */
-		let max_interval = setInterval(() => {}, Number.MAX_SAFE_INTEGER);
-		for (let i = 1; i <= max_interval; ++i) {
-			clearInterval(i);
-		}
+		/* unsubscribe from all runner events */
+		engine.Events.off(engine.runner);
+		engine.Runner.stop(engine.runner);
+	};
+
+	export const resetGame = () => {
+		engine.reset();
 	};
 
 	export const setRunning = (is_running) => {
@@ -80,9 +81,11 @@
 		});
 
 		engine.Render.run(render);
-		engines.push(engine);
+		/* add ourself to engine pool */
+		engines[id] = engine;
 		console.log(engines);
 	});
 </script>
 
+<!-- Engine used by this tile -->
 <Engine bind:this={engine} />

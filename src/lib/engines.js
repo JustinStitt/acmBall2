@@ -1,3 +1,3 @@
 /* This script is used for consumption by code runner */
-
-export let engines = [];
+const MAX_ENGINES = 1024;
+export let engines = Array(MAX_ENGINES);

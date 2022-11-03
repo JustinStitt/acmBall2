@@ -27,8 +27,8 @@ function setup() {
 let frame = 0
 function draw() {
   ++frame
-  Game.Body.rotate(bar, 0.1)
-  if (frame % 40 == 0) {
+  Game.Body.rotate(bar, 0.03)
+  if (frame % 20 == 0) {
     var new_ball = Game.Bodies.circle(Game.width / 2, 0, 10)
     Game.addObject(new_ball)
   }

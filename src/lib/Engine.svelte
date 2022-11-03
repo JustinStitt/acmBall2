@@ -11,9 +11,15 @@
 		Runner.run(runner, engine);
 	} else {
 		Runner.stop(runner);
+		// World.clear(engine.world);
+		// Engine.clear(engine);
+	}
+
+	export const reset = () => {
+		Runner.stop(runner);
 		World.clear(engine.world);
 		Engine.clear(engine);
-	}
+	};
 
 	export const meta = {
 		setup: () => {
@@ -23,6 +29,7 @@
 	};
 
 	export const Engine = Matter.Engine;
+	export const Events = Matter.Events;
 	export const Render = Matter.Render;
 	export const Runner = Matter.Runner;
 	export const Bodies = Matter.Bodies;
