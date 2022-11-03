@@ -1,29 +1,47 @@
 <script>
-	import { Bodies, addObject, engine } from './engine';
 	import { editor_text } from '../stores';
-	// https://codepen.io/FCCJMC/pen/YWLGpa (use this for <script> injection)
+	import Engine from './Engine.svelte';
+	import { onMount } from 'svelte';
+	import { engines } from './engine';
+
+	let id = 0; // each tile needs unique id which maps to their engine index
 	let tick_rate = 1;
 	let text;
 	editor_text.subscribe((value) => {
 		text = value;
 	});
 
+	let draw_interval;
+	let engine;
+
 	export const runCode = () => {
 		console.log('running code inside tile!');
-		console.log(text);
-		// eval(to_run);
-		let old_node = document.querySelector('#code-runner');
-		if (old_node) old_node.remove();
+
+		/* 		remove old code runner if it exists */
+		{
+			let old_node = document.querySelector('#code-runner');
+			if (old_node) old_node.remove();
+		}
+
+		/* construct new code runner and do meta bindings */
 		let runner = document.createElement('script');
-		runner.setAttribute('id', 'code-runner');
-		runner.setAttribute('type', 'module');
-		runner.textContent = 'import * as Game from "./src/lib/engine.js";\n' + text + '\n';
-		runner.textContent +=
-			'\nsetup();\nlet drawinterval = setInterval(() => { if (Game.running) draw(); },' +
-			tick_rate +
-			')\n';
+		runner.setAttribute('id', 'code-runner'); // for targeting later and now
+		runner.setAttribute('type', 'module'); // allows imports/exports
+		/* bootstrap meta setup/draw injection */
+		runner.textContent =
+			`import { engines } from "./src/lib/engine.js";\nconst Game = engines[${id}];\n` +
+			text +
+			'\nGame.meta.setup = setup\nGame.meta.draw = draw;\n';
 		document.body.appendChild(runner); // add to DOM
-		console.log({ runner });
+		setTimeout(() => {
+			engine.meta.setup();
+		}, 100); // janky hack for post-meta setup injection
+	};
+
+	export const startDraw = () => {
+		draw_interval = setInterval(() => {
+			engine.meta.draw();
+		}, tick_rate);
 	};
 
 	export const stopCode = () => {
@@ -31,15 +49,39 @@
 		if (code_runner) {
 			code_runner.remove();
 		}
+
 		/* janky hack to clear ALL intervals */
 		let max_interval = setInterval(() => {}, Number.MAX_SAFE_INTEGER);
 		for (let i = 1; i <= max_interval; ++i) {
 			clearInterval(i);
 		}
 	};
+
+	export const setRunning = (is_running) => {
+		engine.running = is_running;
+	};
+
+	onMount(() => {
+		let main_canvas = document.querySelector('#main-canvas');
+		if (!main_canvas) console.error('NO main-canvas FOUND');
+		var render = engine.Render.create({
+			// element: main_canvas,
+			canvas: main_canvas,
+			engine: engine.engine,
+			options: {
+				height: engine.height,
+				width: engine.width,
+				hasBounds: true,
+				wireframes: false,
+				showPerformance: true,
+				background: 'transparent'
+			}
+		});
+
+		engine.Render.run(render);
+		engines.push(engine);
+		console.log(engines);
+	});
 </script>
 
-<!-- start html -->
-
-<!-- end html -->
-<style></style>
+<Engine bind:this={engine} />

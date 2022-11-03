@@ -3,17 +3,6 @@
 <script>
 	import Tile from './Tile.svelte';
 	import Toolbar from './Toolbar.svelte';
-	import {
-		Runner,
-		setRunning,
-		World,
-		Engine,
-		runner,
-		Render,
-		engine,
-		width,
-		height
-	} from './engine.js';
 	import { onMount } from 'svelte';
 	import { editor_text } from '../stores';
 
@@ -21,16 +10,13 @@
 	let main_canvas;
 
 	export const runGame = () => {
-		setRunning(true);
-		Runner.run(runner, engine);
+		tile.setRunning(true);
+		tile.startDraw();
 	};
 
 	export const resetGame = () => {
-		setRunning(false);
-		World.clear(engine.world);
-		Engine.clear(engine);
-		Runner.stop(runner);
-		stopCode();
+		tile.setRunning(false);
+		stopCode(); // implictly stops draw too
 	};
 
 	export const runCode = () => {
@@ -43,31 +29,13 @@
 	};
 
 	const test = () => {
-		editor_text.set('test');
-		console.log($editor_text);
+		stopCode();
 	};
-
-	onMount(() => {
-		var render = Render.create({
-			// element: main_canvas,
-			canvas: main_canvas,
-			engine: engine,
-			options: {
-				height: height,
-				width: width,
-				hasBounds: true,
-				wireframes: false,
-				showPerformance: true,
-				background: 'transparent'
-			}
-		});
-
-		Render.run(render);
-	});
 </script>
 
 <div class="game-container">
 	<canvas id="main-canvas" bind:this={main_canvas} />
+	<button on:click={test}> test </button>
 </div>
 <Tile bind:this={tile} />
 <Toolbar {runGame} {resetGame} />
