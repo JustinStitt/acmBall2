@@ -2,7 +2,7 @@
 	import { editor_text } from '../stores';
 	import Engine from './Engine.svelte';
 	import { onMount } from 'svelte';
-	import { engines } from './engine';
+	import { engines } from './engines';
 
 	let id = 0; // each tile needs unique id which maps to their engine index
 	let tick_rate = 1;
@@ -27,9 +27,10 @@
 		let runner = document.createElement('script');
 		runner.setAttribute('id', 'code-runner'); // for targeting later and now
 		runner.setAttribute('type', 'module'); // allows imports/exports
+
 		/* bootstrap meta setup/draw injection */
 		runner.textContent =
-			`import { engines } from "./src/lib/engine.js";\nconst Game = engines[${id}];\n` +
+			`import { engines } from "./src/lib/engines.js";\nconst Game = engines[${id}];\n` +
 			text +
 			'\nGame.meta.setup = setup\nGame.meta.draw = draw;\n';
 		document.body.appendChild(runner); // add to DOM
