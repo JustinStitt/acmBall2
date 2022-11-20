@@ -54,7 +54,7 @@
 
 	@media only screen and (max-width: 490px) {
 		.container {
-			flex-direction: column;
+			flex-direction: column !important;
 			/* margin-left: 10vw;
 			margin-right: 10vw; */
 		}
