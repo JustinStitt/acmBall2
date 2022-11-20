@@ -36,7 +36,10 @@ function draw() {
 
 `
 );
+
 export const editor_text = writable('');
+
+export const game_view = writable('left');
 
 // export const starting_text = readable(
 // 	`

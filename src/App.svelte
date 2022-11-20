@@ -2,26 +2,18 @@
 	import Game from './lib/Game.svelte';
 	import Editor from './lib/Editor.svelte';
 	import { onMount } from 'svelte';
+	import { game_view } from './stores';
 
 	onMount(() => {});
 
 	let game;
-
-	let left_view = true;
 </script>
 
 <div class="titlebar">
-	<button
-		class="swap-view-toggle"
-		on:click={() => {
-			left_view = !left_view;
-		}}
-		>Swap View
-	</button>
 	<h5>acmBall2 : Electric Boogaloo</h5>
 </div>
 
-<div class="container" style={`flex-direction: ${!left_view ? 'row-reverse' : 'row'}`}>
+<div class="container" style={`flex-direction: ${$game_view == 'right' ? 'row-reverse' : 'row'}`}>
 	<Game bind:this={game} />
 	<Editor on:compileCode={() => game.compileCode()} on:stopCode={() => game.stopCode()} />
 </div>
@@ -58,19 +50,6 @@
 
 		background-color: rgba(47, 39, 56, 0.293);
 		border: 2px inset aliceblue;
-	}
-
-	.swap-view-toggle {
-		font-size: 0.5em;
-		width: 10%;
-		height: 100%;
-		background-color: #242424;
-		border: 1px solid aliceblue;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		margin-right: auto;
-		padding: 0.05em;
 	}
 
 	@media only screen and (max-width: 490px) {

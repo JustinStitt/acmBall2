@@ -2,7 +2,7 @@
 
 <script>
 	import Tile from './Tile.svelte';
-	import { editor_text } from '../stores';
+	import { editor_text, game_view } from '../stores';
 
 	let tile;
 	let main_canvas;
@@ -71,6 +71,11 @@
 			runGame();
 		}
 	};
+
+	const toggleView = () => {
+		if ($game_view == 'left') game_view.set('right');
+		else game_view.set('left');
+	};
 </script>
 
 <div class="game-container">
@@ -78,6 +83,7 @@
 	<div class="warning" class:warning-slide={do_warning_slide}>COMPILE FIRST</div>
 	<button on:click={togglePlaying}> {!gamestate.playing ? '▶' : '⏸'} </button>
 	<button on:click={resetGame}> 🔁 </button>
+	<button on:click={toggleView}> 👀 </button>
 </div>
 <Tile bind:this={tile} />
 
