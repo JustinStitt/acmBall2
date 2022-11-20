@@ -6,11 +6,14 @@
 	import { engines } from './engines';
 
 	export let id = 0; // each tile needs unique id which maps to their engine index
+	export let source_code = '';
 
-	let text;
-	editor_text.subscribe((value) => {
-		text = value;
-	});
+	$: text = source_code.length == 0 ? $editor_text : source_code;
+
+	// let text;
+	// editor_text.subscribe((value) => {
+	// 	text = value;
+	// });
 
 	let draw_interval;
 	let engine;
@@ -64,7 +67,7 @@
 	};
 
 	onMount(() => {
-		let main_canvas = document.querySelector('#main-canvas');
+		let main_canvas = document.querySelector(`#main-canvas${id}`);
 		if (!main_canvas) console.error('NO main-canvas FOUND');
 		var render = engine.Render.create({
 			// element: main_canvas,
@@ -83,7 +86,6 @@
 		engine.Render.run(render);
 		/* add ourself to engine pool */
 		engines[id] = engine;
-		console.log(engines);
 	});
 </script>
 

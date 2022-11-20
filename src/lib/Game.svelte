@@ -4,8 +4,13 @@
 	import Tile from './Tile.svelte';
 	import { editor_text, game_view } from '../stores';
 
+	// grid stuff
+	export let source_code = '';
+	export let id = 0;
+	// end grid stuff
+
 	let tile;
-	let main_canvas;
+	let main_canvas = {};
 
 	const gamestate = {
 		started: false,
@@ -14,6 +19,7 @@
 	};
 
 	export const runGame = () => {
+		console.log(id);
 		if (!gamestate.started && !gamestate.compiled) {
 			console.log('COMPILE FIRST');
 			return false;
@@ -79,16 +85,18 @@
 </script>
 
 <div class="game-container">
-	<canvas id="main-canvas" bind:this={main_canvas} />
+	<canvas id={`main-canvas${id}`} bind:this={main_canvas} />
 	<div class="warning" class:warning-slide={do_warning_slide}>COMPILE FIRST</div>
 	<button on:click={togglePlaying}> {!gamestate.playing ? '▶' : '⏸'} </button>
 	<button on:click={resetGame}> 🔁 </button>
 	<button on:click={toggleView}> 👀 </button>
 </div>
-<Tile bind:this={tile} />
+
+<Tile bind:this={tile} {source_code} {id} />
 
 <style>
-	#main-canvas {
+	#main-canvas,
+	canvas {
 		box-sizing: border-box;
 		width: 100%;
 		height: 100%;

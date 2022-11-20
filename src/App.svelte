@@ -1,6 +1,7 @@
 <script>
 	import Game from './lib/Game.svelte';
 	import Editor from './lib/Editor.svelte';
+	import Grid from './lib/Grid.svelte';
 	import { onMount } from 'svelte';
 	import { game_view } from './stores';
 
@@ -14,8 +15,9 @@
 </div>
 
 <div class="container" style={`flex-direction: ${$game_view == 'right' ? 'row-reverse' : 'row'}`}>
-	<Game bind:this={game} />
-	<Editor on:compileCode={() => game.compileCode()} on:stopCode={() => game.stopCode()} />
+	<!-- <Game bind:this={game} />
+	<Editor on:compileCode={() => game.compileCode()} on:stopCode={() => game.stopCode()} /> -->
+	<Grid />
 </div>
 
 <style>
