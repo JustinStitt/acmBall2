@@ -3,7 +3,7 @@
 </script>
 
 <div class="titlebar">
-	<div class="title">acmBall2: Electric Boogaloo</div>
+	<div class="title">acmBall2: Electric Boogaloo 🚮 fuk css</div>
 	<!-- <h5>acmBall2 : Electric Boogaloo</h5> -->
 	<div class="links">
 		<Link class="link" to="/">Editor</Link>
