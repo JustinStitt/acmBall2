@@ -36,6 +36,8 @@
 	export const Composite = Matter.Composite;
 	export const Body = Matter.Body;
 	export const World = Matter.World;
+	export const Mouse = Matter.Mouse;
+	export const MouseConstraint = Matter.MouseConstraint;
 
 	export const engine = Matter.Engine.create();
 

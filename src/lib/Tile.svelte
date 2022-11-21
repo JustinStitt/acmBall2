@@ -17,6 +17,9 @@
 
 	let draw_interval;
 	let engine;
+	let render;
+	let mouse;
+	let mouse_circle;
 
 	export const compileAndRunCode = () => {
 		console.log('running code inside tile!');
@@ -43,8 +46,18 @@
 		}, 100); // janky hack for post-meta setup injection
 	};
 
+	export const startDrawMouse = () => {
+		createMouse();
+		engine.Events.on(render, 'afterRender', drawCircleOnMouse);
+	};
+
+	const stopDrawMouse = () => {
+		engine.Events.off(render);
+	};
+
 	export const startDraw = () => {
 		engine.Events.on(engine.runner, 'tick', engine.meta.draw);
+		stopDrawMouse();
 	};
 
 	export const stopCode = () => {
@@ -66,10 +79,23 @@
 		engine.running = is_running;
 	};
 
+	const createMouse = () => {
+		mouse = engine.Mouse.create(render.canvas);
+		render.mouse = mouse;
+		mouse_circle = engine.Bodies.circle(0, 0, 50);
+		mouse_circle.isSensor = true;
+		mouse_circle.render.fillStyle = 'green';
+		engine.addObject(mouse_circle);
+	};
+
+	const drawCircleOnMouse = () => {
+		mouse_circle.position = { x: mouse.position.x, y: mouse.position.y };
+	};
+
 	onMount(() => {
 		let main_canvas = document.querySelector(`#main-canvas${id}`);
 		if (!main_canvas) console.error('NO main-canvas FOUND');
-		var render = engine.Render.create({
+		render = engine.Render.create({
 			// element: main_canvas,
 			canvas: main_canvas,
 			engine: engine.engine,

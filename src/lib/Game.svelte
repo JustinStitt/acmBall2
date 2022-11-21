@@ -47,6 +47,9 @@
 		resetGame();
 		tile.compileAndRunCode();
 		gamestate.compiled = true;
+		if (render_toolbar) {
+			tile.startDrawMouse();
+		}
 	};
 
 	export const stopCode = () => {
