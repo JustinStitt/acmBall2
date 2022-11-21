@@ -23,13 +23,13 @@
 
 		/* 		remove old code runner if it exists */
 		{
-			let old_node = document.querySelector('#code-runner');
+			let old_node = document.querySelector(`#code-runner${id}`);
 			if (old_node) old_node.remove();
 		}
 
 		/* construct new code runner and do meta bindings */
 		let runner = document.createElement('script');
-		runner.setAttribute('id', 'code-runner'); // for targeting later and now
+		runner.setAttribute('id', `code-runner${id}`); // for targeting later and now
 		runner.setAttribute('type', 'module'); // allows imports/exports
 
 		/* bootstrap meta setup/draw injection */
@@ -48,7 +48,7 @@
 	};
 
 	export const stopCode = () => {
-		let code_runner = document.querySelector('#code-runner');
+		let code_runner = document.querySelector(`#code-runner${id}`);
 		if (code_runner) {
 			code_runner.remove();
 		}
@@ -78,7 +78,7 @@
 				width: engine.width,
 				hasBounds: true,
 				wireframes: false,
-				showPerformance: true,
+				// showPerformance: true,
 				background: 'transparent'
 			}
 		});

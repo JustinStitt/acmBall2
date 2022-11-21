@@ -24,6 +24,7 @@
     "eslint-linter-browserify": "^8.26.0",
     "matter-js": "^0.18.0",
     "p5-svelte": "^3.1.2",
+    "svelte-routing": "^1.6.0",
     "tslib": "^2.4.1"
   }
 }

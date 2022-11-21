@@ -7,6 +7,7 @@
 	// grid stuff
 	export let source_code = '';
 	export let id = 0;
+	export let render_toolbar = true;
 	// end grid stuff
 
 	let tile;
@@ -85,11 +86,17 @@
 </script>
 
 <div class="game-container">
-	<canvas id={`main-canvas${id}`} bind:this={main_canvas} />
-	<div class="warning" class:warning-slide={do_warning_slide}>COMPILE FIRST</div>
-	<button on:click={togglePlaying}> {!gamestate.playing ? '▶' : '⏸'} </button>
-	<button on:click={resetGame}> 🔁 </button>
-	<button on:click={toggleView}> 👀 </button>
+	<canvas
+		id={`main-canvas${id}`}
+		bind:this={main_canvas}
+		class:dotted-gray-border={render_toolbar}
+	/>
+	{#if render_toolbar}
+		<div class="warning" class:warning-slide={do_warning_slide}>COMPILE FIRST</div>
+		<button on:click={togglePlaying}> {!gamestate.playing ? '▶' : '⏸'} </button>
+		<button on:click={resetGame}> 🔁 </button>
+		<button on:click={toggleView}> 👀 </button>
+	{/if}
 </div>
 
 <Tile bind:this={tile} {source_code} {id} />
@@ -100,13 +107,16 @@
 		box-sizing: border-box;
 		width: 100%;
 		height: 100%;
+	}
+
+	.dotted-gray-border {
 		border: 4px dotted gray;
 	}
 
 	.game-container {
-		width: 35vw;
+		max-width: 35vw;
 		/* min-width: 400px; */
-		/* aspect-ratio: 1; */
+		aspect-ratio: 1;
 		background-image: url('gridbg.png');
 		/* background-color: red; */
 		padding: 8px;
@@ -115,6 +125,7 @@
 
 	@media only screen and (max-width: 490px) {
 		.game-container {
+			max-width: 78vw !important;
 			width: 78vw;
 			margin-bottom: 10vh;
 			padding-bottom: 10vh;

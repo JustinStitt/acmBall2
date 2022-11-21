@@ -2,46 +2,45 @@
 	import Game from './lib/Game.svelte';
 	import Editor from './lib/Editor.svelte';
 	import Grid from './lib/Grid.svelte';
+	import Titlebar from './lib/Titlebar.svelte';
+	import { Router, Route, Link } from 'svelte-routing';
 	import { onMount } from 'svelte';
 	import { game_view } from './stores';
 
 	onMount(() => {});
 
+	export let url = '';
+
 	let game;
 </script>
 
-<div class="titlebar">
-	<h5>acmBall2 : Electric Boogaloo</h5>
-</div>
+<Router {url}>
+	<main>
+		<Titlebar />
+		<div
+			class="container"
+			style={`flex-direction: ${$game_view == 'right' ? 'row-reverse' : 'row'}`}
+		>
+			<!-- home -->
+			<Route path="/">
+				<Game bind:this={game} />
+				<Editor on:compileCode={() => game.compileCode()} on:stopCode={() => game.stopCode()} />
+			</Route>
+		</div>
 
-<div class="container" style={`flex-direction: ${$game_view == 'right' ? 'row-reverse' : 'row'}`}>
-	<!-- <Game bind:this={game} />
-	<Editor on:compileCode={() => game.compileCode()} on:stopCode={() => game.stopCode()} /> -->
-	<Grid />
-</div>
+		<!-- demo grid page -->
+		<Route path="/demo">
+			<Grid />
+		</Route>
+
+		<!-- 404 unknown route -->
+		<Route>
+			<h1>⚠ 404: Page not Found! ⚠</h1>
+		</Route>
+	</main>
+</Router>
 
 <style>
-	.titlebar > h5 {
-		margin-right: auto;
-		position: absolute;
-		left: 50%;
-		transform: translateX(-50%);
-	}
-
-	.titlebar {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		font-size: calc(12px + 2vw);
-		text-align: center;
-		width: 97vw;
-		height: 7vh;
-		background-color: rgba(27, 26, 26, 0.799);
-		margin-top: 1vh;
-		border: 1px dotted aliceblue;
-		padding: 0.1em;
-	}
-
 	.container {
 		max-width: 97vw;
 		display: flex;
@@ -60,5 +59,9 @@
 			/* margin-left: 10vw;
 			margin-right: 10vw; */
 		}
+	}
+
+	main {
+		width: 99vw;
 	}
 </style>
