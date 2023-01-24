@@ -1,8 +1,8 @@
 <svelte:options accessors={true} />
 
 <script>
-	import Tile from './Tile.svelte';
-	import { editor_text, game_view } from '../stores';
+	import Tile from './tile.svelte';
+	import { editor_text, game_view } from '$public/stores';
 
 	// grid stuff
 	export let source_code = '';

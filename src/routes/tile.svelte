@@ -1,9 +1,10 @@
 <!-- DOM-less (sorta) component used by Graphical aid, Game -->
 <script>
-	import { editor_text } from '../stores';
-	import Engine from './Engine.svelte';
 	import { onMount } from 'svelte';
-	import { engines } from './engines';
+	import { engines } from '$public/engines';
+	import { editor_text } from '$public/stores';
+
+	import Engine from './engine.svelte';
 
 	export let id = 0; // each tile needs unique id which maps to their engine index
 	export let source_code = '';
