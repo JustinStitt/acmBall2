@@ -1,4 +1,5 @@
-import { readable, writable } from 'svelte/store';
+import { readable } from 'svelte/store';
+import { persistable } from './persistable';
 
 export const starting_text = readable(
 	// "var boxB = Game.Bodies.rectangle(200, 200, 300, 300)\nfunction setup() { // runs once at start\n  console.log('hi')\n  Game.addObject(boxB)\n}\n\nfunction draw() { // runs every frame\n  console.log('drawing')\n}"
@@ -37,9 +38,11 @@ function draw() {
 `
 );
 
-export const editor_text = writable('');
+const editor_text_key = '__editor_text';
+export const editor_text = persistable(editor_text_key, '');
 
-export const game_view = writable('left');
+const game_view_key = '__game_view';
+export const game_view = persistable(game_view_key, 'left');
 
 // export const starting_text = readable(
 // 	`
