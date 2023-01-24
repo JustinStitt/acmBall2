@@ -1,19 +1,35 @@
-import { readable, writable } from 'svelte/store';
+import { readable, writable, get } from 'svelte/store';
 
+// subscribe to this store for realtime editor text information
+export const editor_text = writable('');
+
+// default game view (game view on left, editor on right)
+export const game_view = writable('left');
+
+// default ball radius
+export const BALL_RADIUS = readable(50);
+
+// Prepended to User Code
+export const BOILER_PLATE = readable(
+	`import { engines } from "./src/public/engines/index.ts";
+let Game = engines[0];
+Game.meta.draw = draw;
+Game.meta.setup = setup;
+`
+);
+
+// Default code User sees in their Web Editor
 export const starting_text = readable(
-	// "var boxB = Game.Bodies.rectangle(200, 200, 300, 300)\nfunction setup() { // runs once at start\n  console.log('hi')\n  Game.addObject(boxB)\n}\n\nfunction draw() { // runs every frame\n  console.log('drawing')\n}"
-	// 	`var ground = Game.Bodies.rectangle(Game.width / 2, Game.height, Game.width, 60, {isStatic: true, render: {
-	//     fillStyle: 'red', strokeStyle: 'blue', lineWidth: 3
-	//   }
-	// })
-	`var ground = Game.Bodies.rectangle(Game.width / 2, Game.height, Game.width, 60)
+	`${get(BOILER_PLATE)}
+var ball = Game.Bodies.circle(200, 200, ${get(BALL_RADIUS)})
+ball.render.strokeStyle = 'white'
+ball.render.lineWidth = 3
+
+var ground = Game.Bodies.rectangle(Game.width / 2, Game.height, Game.width, 60)
 Game.Body.setStatic(ground, true)
 ground.restitution = 0.9
 ground.render.fillStyle = 'green'
 
-var ball = Game.Bodies.circle(200, 200, 50)
-ball.render.strokeStyle = 'white'
-ball.render.lineWidth = 3
 
 var bar = Game.Bodies.rectangle(Game.width / 2, Game.height / 2, 300, 50)
 Game.Body.setStatic(bar, true)
@@ -36,21 +52,3 @@ function draw() {
 
 `
 );
-
-export const editor_text = writable('');
-
-export const game_view = writable('left');
-
-// export const starting_text = readable(
-// 	`
-// console.log('Game: ', Game)
-// const setup = () => {
-//   console.log('setting up!')
-// }
-
-// const draw = () => {
-
-// }
-
-// `
-// );

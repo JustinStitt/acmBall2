@@ -1,6 +1,8 @@
 <svelte:options accessors={true} />
 
 <script>
+	// @ts-nocheck
+
 	import Tile from './tile.svelte';
 	import { editor_text, game_view } from '$public/stores';
 
@@ -86,6 +88,8 @@
 		if ($game_view == 'left') game_view.set('right');
 		else game_view.set('left');
 	};
+
+	const moveBallStartingPosition = () => {};
 </script>
 
 <div class="game-container">
@@ -99,6 +103,7 @@
 		<button on:click={togglePlaying}> {!gamestate.playing ? '▶' : '⏸'} </button>
 		<button on:click={resetGame}> 🔁 </button>
 		<button on:click={toggleView}> 👀 </button>
+		<button on:click={moveBallStartingPosition}> 🏀 </button>
 	{/if}
 </div>
 

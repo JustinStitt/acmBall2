@@ -1,110 +1,29 @@
 <script>
-	import { EditorState } from '@codemirror/state';
-	import { EditorView, keymap } from '@codemirror/view';
-	import { oneDark } from '@codemirror/theme-one-dark';
-	import { basicSetup } from 'codemirror';
-	import { defaultKeymap } from '@codemirror/commands';
-	import { linter, lintGutter } from '@codemirror/lint';
-	import { esLint, javascript } from '@codemirror/lang-javascript';
 	import { onMount } from 'svelte';
 	import { editor_text, starting_text } from '$public/stores';
-	import readOnlyRangesExtension from 'codemirror-readonly-ranges';
 	import { createEventDispatcher } from 'svelte';
 	import { Linter } from 'eslint-linter-browserify';
+	import { linter, lintGutter } from '@codemirror/lint';
+	import { EditorView, keymap } from '@codemirror/view';
+	import CodeMirror from 'svelte-codemirror-editor';
+	import { esLint, javascript } from '@codemirror/lang-javascript';
+	import { oneDark } from '@codemirror/theme-one-dark';
+	import { closeBrackets, autocompletion } from '@codemirror/autocomplete';
+	import readOnlyRangesExtension from 'codemirror-readonly-ranges';
 
 	const dispatch = createEventDispatcher();
-	const lint_config = {
-		// eslint configuration
-		parserOptions: {
-			ecmaVersion: 2019,
-			sourceType: 'module'
-		},
-		env: {
-			browser: true,
-			node: true
-		},
-		rules: {
-			semi: ['error', 'never']
-		}
-	};
-
-	const getReadOnlyRanges = (target_state) => {
-		return [
-			// {
-			// 	from: 0,
-			// 	to: target_state.doc.line(1).to
-			// },
-			// {
-			// 	from: target_state.doc.line(5).from,
-			// 	to: target_state.doc.line(5).to
-			// },
-			// {
-			// 	from: target_state.doc.line(target_state.doc.lines).from,
-			// 	to: undefined
-			// }
-		];
-	};
 
 	let editor_pane;
 
-	let editorState;
-
-	const editorChanged = (new_view) => {
-		/* editor changed */
-		text = new_view.state.doc.toString();
-	};
-
-	$: editor_text.set(text);
-
-	let text = $starting_text;
-	editor_text.subscribe((val) => {
-		text = val;
-	});
-
-	let view;
-	export const updateEditorText = (txt) => {
-		text = txt;
-		editor_text.set(txt);
-		console.log($editor_text);
-		let old_cursor = view.state.selection.ranges[0].from;
-		const update = view.state.update({
-			changes: { from: 0, to: view.state.doc.length, insert: txt }
-		});
-		view.update([update]);
-		view.dispatch({
-			selection: {
-				anchor: old_cursor,
-				head: old_cursor
+	// Make boilerplate Read-Only
+	const getReadOnlyRanges = (state) => {
+		return [
+			{
+				from: undefined,
+				to: state.doc.line(4).to
 			}
-		});
+		];
 	};
-
-	// $: if (view) updateEditorText(text);
-
-	onMount(() => {
-		editorState = EditorState.create({
-			doc: $starting_text,
-			extensions: [
-				keymap.of(defaultKeymap),
-				basicSetup,
-				javascript(),
-				oneDark,
-				EditorView.updateListener.of((v) => {
-					if (v.docChanged) {
-						editorChanged(v);
-					}
-				}),
-				EditorView.lineWrapping,
-				readOnlyRangesExtension(getReadOnlyRanges),
-				linter(esLint(new Linter(), lint_config)) // no idea why red squiggles
-			]
-		});
-		view = new EditorView({
-			state: editorState,
-			parent: document.getElementById('editor-pane')
-		});
-		editorChanged(view);
-	});
 
 	const compileCode = () => {
 		dispatch('compileCode');
@@ -115,16 +34,45 @@
 	};
 
 	const resetCode = () => {
-		updateEditorText($starting_text);
+		// updateEditorText($starting_text);
 	};
+
+	const handleChange = (change) => {
+		// console.log('change', change);
+	};
+
+	const uploadCode = () => {
+		// TODO
+	};
+
+	onMount(() => {
+		$editor_text = $starting_text;
+		// or fetch from local storage here
+	});
 </script>
 
 <div class="editor-container">
-	<div id="editor-pane" class="editor" bind:this={editor_pane} />
+	<div id="editor-pane" class="editor" bind:this={editor_pane}>
+		<CodeMirror
+			bind:value={$editor_text}
+			lang={javascript()}
+			theme={oneDark}
+			on:change={handleChange}
+			extensions={[
+				EditorView.lineWrapping,
+				linter(esLint(new Linter())),
+				closeBrackets(),
+				autocompletion(),
+				lintGutter(),
+				readOnlyRangesExtension(getReadOnlyRanges)
+			]}
+		/>
+	</div>
 	<div class="editor-controls">
 		<button on:click={compileCode}>Compile Code 🟢</button>
 		<button on:click={resetCode}>Reset Code</button>
-		<button>QazQux</button>
+		<button on:click={uploadCode}>Upload Code</button>
+		<button>Submit</button>
 	</div>
 </div>
 

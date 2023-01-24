@@ -1,8 +1,10 @@
 <!-- DOM-less (sorta) component used by Graphical aid, Game -->
 <script>
+	// @ts-nocheck
+
 	import { onMount } from 'svelte';
 	import { engines } from '$public/engines';
-	import { editor_text } from '$public/stores';
+	import { editor_text, BALL_RADIUS, BOILER_PLATE } from '$public/stores';
 
 	import Engine from './engine.svelte';
 
@@ -11,11 +13,6 @@
 
 	$: text = source_code.length == 0 ? $editor_text : source_code;
 
-	// let text;
-	// editor_text.subscribe((value) => {
-	// 	text = value;
-	// });
-
 	let draw_interval;
 	let engine;
 	let render;
@@ -23,8 +20,14 @@
 	let mouse_circle;
 
 	export const compileAndRunCode = () => {
-		console.log('running code inside tile!');
+		makeRunner();
+		setTimeout(() => {
+			engine.meta.setup();
+		}, 100); // janky hack for post-meta setup injection
+	};
 
+	// This function makes a new <script> element in the DOM to run user code
+	const makeRunner = () => {
 		/* 		remove old code runner if it exists */
 		{
 			let old_node = document.querySelector(`#code-runner${id}`);
@@ -37,14 +40,8 @@
 		runner.setAttribute('type', 'module'); // allows imports/exports
 
 		/* bootstrap meta setup/draw injection */
-		runner.textContent =
-			`import { engines } from "./src/public/engines/index.ts";\nconst Game = engines[${id}];\n` +
-			text +
-			'\nGame.meta.setup = setup\nGame.meta.draw = draw;\n';
+		runner.textContent = $editor_text;
 		document.body.appendChild(runner); // add to DOM
-		setTimeout(() => {
-			engine.meta.setup();
-		}, 100); // janky hack for post-meta setup injection
 	};
 
 	export const startDrawMouse = () => {
@@ -83,7 +80,7 @@
 	const createMouse = () => {
 		mouse = engine.Mouse.create(render.canvas);
 		render.mouse = mouse;
-		mouse_circle = engine.Bodies.circle(0, 0, 50);
+		mouse_circle = engine.Bodies.circle(0, 0, $BALL_RADIUS);
 		mouse_circle.isSensor = true;
 		mouse_circle.render.fillStyle = 'green';
 		engine.addObject(mouse_circle);
