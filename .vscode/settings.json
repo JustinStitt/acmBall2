@@ -11,5 +11,10 @@
       "statusBarItem.remoteBackground": "#1f1f28"
     },
     "minimap.background": "#00000000"
-  }
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "[svelte]": {
+    "editor.defaultFormatter": "svelte.svelte-vscode"
+  },
 }

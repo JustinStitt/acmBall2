@@ -7,10 +7,10 @@
 	import { linter, lintGutter } from '@codemirror/lint';
 	import { esLint, javascript } from '@codemirror/lang-javascript';
 	import { onMount } from 'svelte';
-	import { editor_text, starting_text } from '../stores.js';
+	import { editor_text, starting_text } from '$public/stores';
 	import readOnlyRangesExtension from 'codemirror-readonly-ranges';
 	import { createEventDispatcher } from 'svelte';
-	import '../../node_modules/eslint-linter-browserify';
+	import 'eslint-linter-browserify';
 
 	const dispatch = createEventDispatcher();
 	const lint_config = {
@@ -47,23 +47,7 @@
 
 	let editor_pane;
 
-	let editorState = EditorState.create({
-		doc: $starting_text,
-		extensions: [
-			keymap.of(defaultKeymap),
-			basicSetup,
-			javascript(),
-			oneDark,
-			EditorView.updateListener.of((v) => {
-				if (v.docChanged) {
-					editorChanged(v);
-				}
-			}),
-			EditorView.lineWrapping,
-			readOnlyRangesExtension(getReadOnlyRanges),
-			linter(esLint(new eslint.Linter(), lint_config)) // no idea why red squiggles
-		]
-	});
+	let editorState;
 
 	const editorChanged = (new_view) => {
 		/* editor changed */
@@ -98,6 +82,23 @@
 	// $: if (view) updateEditorText(text);
 
 	onMount(() => {
+		editorState = EditorState.create({
+			doc: $starting_text,
+			extensions: [
+				keymap.of(defaultKeymap),
+				basicSetup,
+				javascript(),
+				oneDark,
+				EditorView.updateListener.of((v) => {
+					if (v.docChanged) {
+						editorChanged(v);
+					}
+				}),
+				EditorView.lineWrapping,
+				readOnlyRangesExtension(getReadOnlyRanges),
+				linter(esLint(new eslint.Linter(), lint_config)) // no idea why red squiggles
+			]
+		});
 		view = new EditorView({
 			state: editorState,
 			parent: document.getElementById('editor-pane')

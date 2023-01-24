@@ -1,6 +1,6 @@
 <script>
-	import Game from './Game.svelte';
-	import { starting_text } from '../stores';
+	import Game from '../game.svelte';
+	import { starting_text } from '$public/stores';
 
 	let n = 4;
 	$: idxs = Array.from(Array(n).keys());
