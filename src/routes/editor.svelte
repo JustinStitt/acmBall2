@@ -10,7 +10,7 @@
 	import { editor_text, starting_text } from '$public/stores';
 	import readOnlyRangesExtension from 'codemirror-readonly-ranges';
 	import { createEventDispatcher } from 'svelte';
-	import 'eslint-linter-browserify';
+	import { Linter } from 'eslint-linter-browserify';
 
 	const dispatch = createEventDispatcher();
 	const lint_config = {
@@ -95,8 +95,8 @@
 					}
 				}),
 				EditorView.lineWrapping,
-				readOnlyRangesExtension(getReadOnlyRanges)
-				// linter(esLint(new eslint.Linter(), lint_config)) // no idea why red squiggles
+				readOnlyRangesExtension(getReadOnlyRanges),
+				linter(esLint(new Linter(), lint_config)) // no idea why red squiggles
 			]
 		});
 		view = new EditorView({
