@@ -38,7 +38,7 @@
 
 		/* bootstrap meta setup/draw injection */
 		runner.textContent =
-			`import { engines } from "./src/lib/engines.js";\nconst Game = engines[${id}];\n` +
+			`import { engines } from "./src/public/engines/index.ts";\nconst Game = engines[${id}];\n` +
 			text +
 			'\nGame.meta.setup = setup\nGame.meta.draw = draw;\n';
 		document.body.appendChild(runner); // add to DOM

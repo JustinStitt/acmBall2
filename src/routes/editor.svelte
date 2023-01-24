@@ -95,8 +95,8 @@
 					}
 				}),
 				EditorView.lineWrapping,
-				readOnlyRangesExtension(getReadOnlyRanges),
-				linter(esLint(new eslint.Linter(), lint_config)) // no idea why red squiggles
+				readOnlyRangesExtension(getReadOnlyRanges)
+				// linter(esLint(new eslint.Linter(), lint_config)) // no idea why red squiggles
 			]
 		});
 		view = new EditorView({
