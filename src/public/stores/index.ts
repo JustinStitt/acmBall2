@@ -12,7 +12,7 @@ export const BALL_RADIUS = readable(50);
 // Prepended to User Code
 export const BOILER_PLATE = readable(
 	`import { engines } from "./src/public/engines/index.ts";
-let Game = engines[0];
+const Game = engines[0];
 Game.meta.draw = draw;
 Game.meta.setup = setup;
 `

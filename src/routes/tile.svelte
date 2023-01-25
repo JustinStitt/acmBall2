@@ -4,7 +4,7 @@
 
 	import { onMount } from 'svelte';
 	import { engines } from '$public/engines';
-	import { editor_text, BALL_RADIUS, BOILER_PLATE } from '$public/stores';
+	import { editor_text, BALL_RADIUS } from '$public/stores';
 
 	import Engine from './engine.svelte';
 
@@ -41,6 +41,8 @@
 
 		/* bootstrap meta setup/draw injection */
 		runner.textContent = $editor_text;
+		runner.textContent = runner.textContent.replace('[0]', `[${id}]`);
+		console.log('text: ', runner.textContent);
 		document.body.appendChild(runner); // add to DOM
 	};
 
