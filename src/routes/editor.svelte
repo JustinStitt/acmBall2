@@ -34,7 +34,7 @@
 	};
 
 	const resetCode = () => {
-		// updateEditorText($starting_text);
+		$editor_text = $starting_text;
 	};
 
 	const handleChange = (change) => {
@@ -45,9 +45,15 @@
 		// TODO
 	};
 
+	// Send code to backend and save to localStorage
+	const submitCode = () => {
+		localStorage.setItem('editor-text', $editor_text);
+	};
+
 	onMount(() => {
-		$editor_text = $starting_text;
 		// or fetch from local storage here
+		let last_uploaded_text = localStorage.getItem('editor-text');
+		$editor_text = last_uploaded_text || $starting_text;
 	});
 </script>
 
@@ -72,7 +78,7 @@
 		<button on:click={compileCode}>Compile Code 🟢</button>
 		<button on:click={resetCode}>Reset Code</button>
 		<button on:click={uploadCode}>Upload Code</button>
-		<button>Submit</button>
+		<button on:click={submitCode}>Submit</button>
 	</div>
 </div>
 
