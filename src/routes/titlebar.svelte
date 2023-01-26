@@ -3,6 +3,7 @@
 	<div class="links">
 		<a href="/">Editor</a>
 		<a href="/demo">Demo</a>
+		<a href="/approve">Approve</a>
 	</div>
 </div>
 

@@ -22,6 +22,8 @@
 		Engine.clear(engine);
 	};
 
+	/* the setup and draw function are empty, later on the user code has it's
+	 * respective setup and draw functions linked */
 	export const meta = {
 		setup: () => {
 			console.log('old setup');

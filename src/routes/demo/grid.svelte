@@ -1,12 +1,15 @@
-<script lang="ts">
+<script>
+	// @ts-nocheck
 	import Game from '../game.svelte';
 
 	export let tiles;
 
-	$: idxs = Array.from(Array(1).keys());
-	$: grids = Array(1);
+	$: idxs = Array.from(Array(tiles.length).keys());
+	$: grids = Array(tiles.length).fill({});
 
 	const compileAll = () => {
+		console.log('grids: ', grids);
+		console.log('tiles: ', tiles);
 		for (let i = 0; i < grids.length; ++i) {
 			grids[i].compileCode();
 		}
@@ -19,7 +22,7 @@
 		// quick tester to see tiles in intervals starting up!
 		let i = 1;
 		setInterval(() => {
-			if (i >= n) return;
+			if (i >= tiles.length) return;
 			grids[i++].runGame();
 		}, 1000);
 	};
