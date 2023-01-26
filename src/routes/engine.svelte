@@ -46,11 +46,20 @@
 		Composite.add(engine.world, [obj]);
 	};
 
-	export const ball = Bodies.circle($BALL_START_POSITION.x, $BALL_START_POSITION.y, $BALL_RADIUS);
+	export const ball_default = Bodies.circle(
+		// reset ball to this state using `clone` (see tile.svelte)
+		$BALL_START_POSITION.x,
+		$BALL_START_POSITION.y,
+		$BALL_RADIUS
+	);
+
 	// TODO: set default render styles for everything. make easy-to-use abstraction for users
-	ball.render.strokeStyle = 'black';
-	ball.render.fillStyle = 'green';
-	ball.render.lineWidth = 8;
+	ball_default.render.strokeStyle = 'black';
+	ball_default.render.fillStyle = 'green';
+	ball_default.render.lineWidth = 8;
+	addObject(ball_default); // this object gets deleted when compiling
+
+	export let ball; // for use in user code as `Game.ball` (must be let so we can reassign the reference)
 
 	export const runner = Runner.create();
 </script>

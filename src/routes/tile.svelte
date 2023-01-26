@@ -7,6 +7,7 @@
 	import { editor_text, BALL_RADIUS, BALL_START_POSITION } from '$public/stores';
 
 	import Engine from './engine.svelte';
+	import clone from 'clone';
 
 	export let id = 0; // each tile needs unique id which maps to their engine index
 	export let source_code = '';
@@ -22,9 +23,6 @@
 	let ball_start_position = $BALL_START_POSITION;
 
 	export const compileAndRunCode = () => {
-		// engine.ball.position.x = ball_start_position.x;
-		// engine.ball.position.y = ball_start_position.y;
-		engine.Body.setPosition(engine.ball, { x: ball_start_position.x, y: ball_start_position.y });
 		makeRunner();
 		setTimeout(() => {
 			engine.meta.setup();
@@ -77,6 +75,8 @@
 
 	export const resetGame = () => {
 		engine.reset();
+		engine.ball = clone(engine.ball_default);
+		engine.addObject(engine.ball);
 	};
 
 	export const setRunning = (is_running) => {

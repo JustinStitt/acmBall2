@@ -35,7 +35,6 @@ Game.Body.setStatic(bar, true)
 
 function setup() {
   Game.addObject(ground)
-  Game.addObject(Game.ball)
   Game.addObject(bar)
 }
 
