@@ -4,6 +4,8 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
+		"wipe": "sqlite3 balls.db < src/wax.sql",
+		"dev-wipe": "sqlite3 balls.db < src/wax.sql && vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
