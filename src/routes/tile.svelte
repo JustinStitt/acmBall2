@@ -4,7 +4,7 @@
 
 	import { onMount } from 'svelte';
 	import { engines } from '$public/engines';
-	import { editor_text, BALL_RADIUS } from '$public/stores';
+	import { editor_text, BALL_RADIUS, BALL_START_POSITION } from '$public/stores';
 
 	import Engine from './engine.svelte';
 
@@ -19,7 +19,12 @@
 	let mouse;
 	let mouse_circle;
 
+	let ball_start_position = $BALL_START_POSITION;
+
 	export const compileAndRunCode = () => {
+		// engine.ball.position.x = ball_start_position.x;
+		// engine.ball.position.y = ball_start_position.y;
+		engine.Body.setPosition(engine.ball, { x: ball_start_position.x, y: ball_start_position.y });
 		makeRunner();
 		setTimeout(() => {
 			engine.meta.setup();
@@ -40,9 +45,8 @@
 		runner.setAttribute('type', 'module'); // allows imports/exports
 
 		/* bootstrap meta setup/draw injection */
-		runner.textContent = $editor_text;
+		runner.textContent = text;
 		runner.textContent = runner.textContent.replace('[0]', `[${id}]`);
-		console.log('text: ', runner.textContent);
 		document.body.appendChild(runner); // add to DOM
 	};
 

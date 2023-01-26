@@ -50,7 +50,7 @@
 		tile.compileAndRunCode();
 		gamestate.compiled = true;
 		if (render_toolbar) {
-			tile.startDrawMouse();
+			// tile.startDrawMouse(); // don't render mouse for now
 		}
 	};
 

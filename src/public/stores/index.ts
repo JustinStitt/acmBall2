@@ -9,6 +9,8 @@ export const game_view = writable('left');
 // default ball radius
 export const BALL_RADIUS = readable(50);
 
+export const BALL_START_POSITION = readable({ x: 200, y: 150 });
+
 // Prepended to User Code
 export const BOILER_PLATE = readable(
 	`import { engines } from "./src/public/engines/index.ts";
@@ -21,9 +23,6 @@ Game.meta.setup = setup;
 // Default code User sees in their Web Editor
 export const starting_text = readable(
 	`${get(BOILER_PLATE)}
-var ball = Game.Bodies.circle(200, 200, ${get(BALL_RADIUS)})
-ball.render.strokeStyle = 'white'
-ball.render.lineWidth = 3
 
 var ground = Game.Bodies.rectangle(Game.width / 2, Game.height, Game.width, 60)
 Game.Body.setStatic(ground, true)
@@ -36,7 +35,7 @@ Game.Body.setStatic(bar, true)
 
 function setup() {
   Game.addObject(ground)
-  Game.addObject(ball)
+  Game.addObject(Game.ball)
   Game.addObject(bar)
 }
 
