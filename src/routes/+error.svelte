@@ -1,1 +1,1 @@
-<h1>⚠ 404: Page not Found! ⚠</h1>
+<h1>⚠ Error ⚠: Check console/network logs </h1>

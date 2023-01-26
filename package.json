@@ -4,6 +4,8 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
+		"wipe": "sqlite3 balls.db < src/wax.sql",
+		"dev-wipe": "sqlite3 balls.db < src/wax.sql && vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -16,6 +18,7 @@
 		"@sveltejs/adapter-auto": "^1.0.0",
 		"@sveltejs/kit": "^1.0.0",
 		"@types/matter-js": "^0.18.2",
+		"@types/sqlite3": "^3.1.8",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
 		"eslint": "^8.32.0",
@@ -41,6 +44,7 @@
 		"eslint-linter-browserify": "^8.32.0",
 		"matter-js": "^0.18.0",
 		"p5-svelte": "^3.1.2",
-		"svelte-codemirror-editor": "^1.1.0"
+    "svelte-codemirror-editor": "^1.1.0",
+    "sqlite3": "^5.1.4"
 	}
 }

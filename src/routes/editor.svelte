@@ -40,14 +40,35 @@
 	const handleChange = (change) => {
 		// console.log('change', change);
 	};
-
-	const uploadCode = () => {
+	// Upload code from external file
+	const uploadCode = async () => {
 		// TODO
 	};
 
 	// Send code to backend and save to localStorage
-	const submitCode = () => {
+	const submitCode = async () => {
 		localStorage.setItem('editor-text', $editor_text);
+		let name = localStorage.getItem('name');
+		console.log(name);
+		if (!name) {
+			name = window.prompt('Enter your team name:', '');
+			localStorage.setItem('name', name);
+			localStorage.setItem('version', 1);
+		}
+		const version = parseInt(localStorage.getItem('version'));
+		localStorage.setItem('version', version + 1);
+
+		const res = await fetch('/submit', {
+			method: 'POST',
+			body: JSON.stringify({
+				name: name,
+				code: $editor_text,
+				version: version
+			})
+		});
+
+		const result = await res.text();
+		console.log(result);
 	};
 
 	onMount(() => {

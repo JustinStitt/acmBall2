@@ -1,14 +1,12 @@
-<script>
+<script lang="ts">
 	import Game from '../game.svelte';
-	import { starting_text } from '$public/stores';
 
-	let n = 4;
-	$: idxs = Array.from(Array(n).keys());
+	export let tiles;
 
-	$: grids = Array(n).fill({});
+	$: idxs = Array.from(Array(1).keys());
+	$: grids = Array(1);
 
 	const compileAll = () => {
-		console.log(grids);
 		for (let i = 0; i < grids.length; ++i) {
 			grids[i].compileCode();
 		}
@@ -29,9 +27,16 @@
 
 <div class="container">
 	<div class="grid">
-		{#each idxs as idx}
-			<Game bind:this={grids[idx]} source_code={$starting_text} id={idx} render_toolbar={false} />
-		{/each}
+		{#if tiles}
+			{#each idxs as idx}
+				<Game
+					bind:this={grids[idx]}
+					source_code={tiles[idx].code}
+					id={idx}
+					render_toolbar={false}
+				/>
+			{/each}
+		{/if}
 	</div>
 	<div class="toolbar">
 		<button on:click={compileAll}>Compile all</button>
