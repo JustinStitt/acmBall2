@@ -1,22 +1,25 @@
 <script>
 	// @ts-nocheck
 	import Game from '../game.svelte';
+	import { onMount } from 'svelte';
 
 	export let tiles;
+	const MAX_TILES = 256;
 
 	$: idxs = Array.from(Array(tiles.length).keys());
-	$: grids = Array(tiles.length).fill({});
+	let grids = Array(MAX_TILES).fill({});
+	// $: grids = Array(tiles.length).fill({});
 
 	const compileAll = () => {
 		console.log('grids: ', grids);
 		console.log('tiles: ', tiles);
-		for (let i = 0; i < grids.length; ++i) {
+		for (let i = 0; i < tiles.length; ++i) {
 			grids[i].compileCode();
 		}
 	};
 
 	const start = () => {
-		/* start running the firs tile! */
+		/* start running the first tile! */
 		grids[0].runGame();
 
 		// quick tester to see tiles in intervals starting up!
