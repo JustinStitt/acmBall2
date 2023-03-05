@@ -18,10 +18,15 @@
 	}
 
 	.titlebar {
-		width: 100%;
+		max-width: 90%;
 		display: flex;
-		justify-content: space-around;
+		justify-content: center;
+    align-items: center;
+    height: 5vh;
 		font-size: calc(12px + 1.2vw);
-		background-color: green;
+    color: #46a078;
+		background-color: #eee;
+    margin: 20px;
+    border-radius: 20px;
 	}
 </style>

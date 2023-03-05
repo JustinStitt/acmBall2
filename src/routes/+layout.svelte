@@ -21,6 +21,7 @@
 
 <style>
 	main {
-		width: 99vw;
+		width: 100vw;
+    margin: 0;
 	}
 </style>

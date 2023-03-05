@@ -105,29 +105,34 @@
 
 <style>
 	.editor {
-		background-color: rgb(22, 35, 216);
 		width: 50vw;
 		height: 70vh;
 		overflow-y: scroll;
 		padding: 5px;
-		border-radius: 2%;
-
 		display: flex;
 		flex-direction: column-reverse;
-	}
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .editor::-webkit-scrollbar {
+    display: none;
+  }
 
 	.editor-controls {
 		margin: 5px;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-around;
-		background-color: blueviolet;
 		border-radius: 5px;
+    background-color: #62bb91;
 	}
 
 	.editor-container {
-		background-color: orange;
-		border-radius: 2%;
+    border: 5px solid #99f3c7;
+    background-color: #62bb91;
+		border-radius: 1%;
 		max-height: 80vh;
 		padding: 4px;
 	}
