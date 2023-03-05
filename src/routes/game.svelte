@@ -126,9 +126,9 @@
 		/* min-width: 400px; */
 		aspect-ratio: 1;
 		background-image: url('gridbg.png');
-		/* background-color: red; */
 		padding: 8px;
 		border-radius: 1%;
+    border: 5px solid #62bb91;
 	}
 
 	@media only screen and (max-width: 490px) {

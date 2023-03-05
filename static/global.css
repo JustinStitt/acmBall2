@@ -6,7 +6,7 @@
 
 	color-scheme: light dark;
 	color: rgba(255, 255, 255, 0.87);
-	background-color: #242424;
+	background-color: #62bb91;
 
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
@@ -32,8 +32,8 @@ a:hover {
 
 body {
 	margin: 0;
-	display: flex;
-	justify-content: center;
+  width: 100vw;
+  min-width: 100vw;
 }
 
 h1 {
@@ -71,7 +71,7 @@ button:active {
 @media (prefers-color-scheme: light) {
 	:root {
 		color: #213547;
-		background-color: #ffffff;
+		background-color: #62bb91;
 	}
 	a:hover {
 		color: #747bff;
